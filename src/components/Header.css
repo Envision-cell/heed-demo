@@ -1,0 +1,44 @@
+/* ───────────────────────────────────────────── */
+/* Header Styles – Desktop Base (≥1025px)       */
+/* ───────────────────────────────────────────── */
+.heed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  width: 100%;
+  height: 60px;
+
+  background: transparent !important; /* No background */
+  border: none !important;            /* No border */
+  box-shadow: none !important;        /* No shadow */
+
+  margin: 2px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  padding: 0 20px;
+}
+
+/* ───────────────────────────────────────────── */
+/* Tablet Styles (769px – 1024px)               */
+/* ───────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .heed-header {
+    height: 60px;
+    padding: 0 15px;
+  }
+}
+
+/* ───────────────────────────────────────────── */
+/* Mobile Styles (≤768px)                       */
+/* ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .heed-header {
+    height: 60px;
+    padding: 0 10px;
+  }
+}

@@ -1,0 +1,176 @@
+/* ─────────────────────────────────────────────
+   ❶  GLOBAL RESET / BASE
+   ───────────────────────────────────────────── */
+html,body{
+  margin:0;padding:0;box-sizing:border-box;
+  width:100%;height:100%;background:#000;
+  overscroll-behavior:none;        /* prevent elastic */
+}
+
+/* ─────────────────────────────────────────────
+   ❷  PINNED HERO SECTION + CANVAS
+   ───────────────────────────────────────────── */
+.heed-jet-section{
+ position:relative;
+  width:100%;
+  height:100vh;            /* this section itself is one viewport tall */
+  overflow:hidden;         /* nothing bleeds outside                 */
+  background:#000;
+}
+
+
+/* .heed-jet-section canvas{
+  position:absolute;inset:0;       
+  width:100%;height:100%;
+  object-fit:cover;                
+  backface-visibility:hidden;
+  transform:translateZ(0);
+  pointer-events:none;          
+} */
+
+heed-jet-section canvas{
+  position:fixed;          /* ignore parents, lock to viewport       */
+  inset:0;                 /* top:0; right:0; bottom:0; left:0       */
+  width:100vw;             /* full visual viewport width             */
+  height:100svh;           /* full “small-viewport” height           */
+  height:100dvh;           /* fallback for browsers that support dvh */
+  object-fit:cover;        /* scale but never letter-box             */
+  backface-visibility:hidden;
+  transform:translateZ(0); /* keeps GPU compositing on Safari/iOS    */
+  pointer-events:none;     /* clicks go through to overlay buttons   */
+  z-index:0;
+}
+/* ─── close (“✕”) button ─── */
+.close-button-jet{
+  position:absolute;top:20px;right:20px;z-index:20;
+  font-size:28px;padding:6px 12px;border-radius:6px;
+  background:rgba(0,0,0,.6);color:#fff;border:none;
+  cursor:pointer;transition:background .25s;
+}
+.close-close-button-jet:hover{background:rgba(0,0,0,.85);}
+
+/* ─── full-screen overlay that fades away on first scroll ─── */
+.intro-overlay{
+  position:fixed;inset:0;
+  display:flex;justify-content:center;align-items:center;
+  background:rgba(0,0,0,.82);
+  z-index:15;pointer-events:none;
+}
+.intro-text{
+  font:900 clamp(32px,7vw,90px)/1 "AGENCYFB",sans-serif;
+  color:#fff;letter-spacing:.07em;
+}
+
+/* ─── tiny scroll hint at bottom centre ─── */
+.scroll-hint{
+  position:absolute;bottom:22px;left:50%;
+  transform:translateX(-50%);
+  font-family:sans-serif;font-size:14px;letter-spacing:.12rem;
+  color:#fff;text-shadow:0 0 6px rgba(0,0,0,.8);
+  animation:bob 2s infinite;pointer-events:none;
+}
+@keyframes bob{
+  0%,100%{transform:translate(-50%,0);}
+  50%    {transform:translate(-50%,6px);}
+}
+
+/* ─────────────────────────────────────────────
+   ❸  LOADING SPINNER (if you re-enable it)
+   ───────────────────────────────────────────── */
+.loading-message{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:#dcdcdc;font-family:sans-serif;font-size:1rem;
+  text-align:center;z-index:100;
+}
+.spinner{
+  width:80px;height:80px;
+  border:3px solid rgba(0,0,0,.25);
+  border-top-color:#000;border-radius:50%;
+  animation:spin 1s linear infinite;margin:0 auto 1rem;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ─────────────────────────────────────────────
+   ❹  DATA-SHEET SIGN-UP SECTION
+   ───────────────────────────────────────────── */
+.data-sheet-section-jet{
+  background:#000000;
+  color:#fefcfc;text-align:center;
+  padding:90px 20px;font-family:"AGENCYFB",sans-serif;
+}
+.data-sheet-section h2{
+  font-size:clamp(34px,5vw,64px);
+  margin:0 0 16px;
+}
+.data-sheet-section p{
+  font-size:18px;max-width:700px;margin:0 auto 28px;
+}
+.newsletter-form{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:10px;
+}
+.newsletter-form input{
+  padding:14px 16px;font-size:16px;
+  border:none;border-radius:6px;min-width:260px;
+}
+.newsletter-form button{
+  padding:14px 32px;font-size:16px;font-weight:700;
+  border:none;border-radius:6px;background:#36C5F0;color:#000;
+  cursor:pointer;transition:background .25s;
+}
+.newsletter-form button:hover{background:#9fe0f4;}
+
+/* ─────────────────────────────────────────────
+   ❺  RESPONSIVE TWEAKS
+   ───────────────────────────────────────────── */
+@media (max-width:768px){
+  .scroll-hint{font-size:12px;}
+  .data-sheet-section p{font-size:16px;}
+}
+@media (min-width:769px) and (max-width:1024px){
+  .heed-jet-section canvas{transform:translateZ(0) scale(1.08);}
+}
+
+
+/* ───────────────────────────────────────────── */
+/* Scroll-to-Top button: small gradient bar     */
+/* moving top → bottom and back                 */
+/* ───────────────────────────────────────────── */
+.scroll-top-button {
+  position: fixed;
+  right: 20px;
+  width: 4px;             /* thin line */
+  height: 100px;          /* short bar */
+  border: none;
+  padding: 0;
+
+  /* vertical gradient */
+  background-image: linear-gradient(
+    180deg,
+    #0025ff   0%,
+    #0054ff  16.6%,
+    #0083ff  33.3%,
+    #00b2ff  50%,
+    #00dfff  66.6%,
+    #b4fcff 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  /* animate the bar itself up/down */
+  animation: slide-down 1s linear infinite alternate;
+
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 1000;
+}
+.scroll-top-button:hover {
+  opacity: 1;
+  transform: translateX(-2px);
+}
+
+@keyframes slide-down {
+  0%   { top: 20px; }
+  100% { top: calc(100vh - 20px - 100px); }
+}
