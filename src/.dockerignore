@@ -1,0 +1,12 @@
+cat > frontend/.dockerignore <<'EOF'
+node_modules
+build
+.git
+.DS_Store
+EOF
+
+cat > backend/.dockerignore <<'EOF'
+node_modules
+.git
+.DS_Store
+EOF
