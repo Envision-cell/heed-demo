@@ -1,165 +1,210 @@
 /* ─────────────────────────────────────────────
    ❶  GLOBAL RESET / BASE
    ───────────────────────────────────────────── */
-html,body{
-  margin:0;padding:0;box-sizing:border-box;
-  width:100%;height:100%;background:#000;
-  overscroll-behavior:none;        /* prevent elastic */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overscroll-behavior: none;
 }
 
 /* ─────────────────────────────────────────────
-   ❷  PINNED HERO SECTION + CANVAS
+   ❷  PINNED HERO SECTION + CANVAS + ZOOM
    ───────────────────────────────────────────── */
-.heed-jet-section{
- position:relative;
-  width:100%;
-  height:100vh;            /* this section itself is one viewport tall */
-  overflow:hidden;         /* nothing bleeds outside                 */
-  background:#000;
+.heed-jet-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin-right: 20;
+  margin-left: 20;
+  overflow: hidden;
+  background: #000;
 }
 
+/* Fullscreen canvas with zoom effect and proper stretch */
+.heed-jet-section canvas {
+  position: fixed;
+  top: 50;
+  left: 50;
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: block;
 
-/* .heed-jet-section canvas{
-  position:absolute;inset:0;       
-  width:100%;height:100%;
-  object-fit:cover;                
-  backface-visibility:hidden;
-  transform:translateZ(0);
-  pointer-events:none;          
-} */
-
-heed-jet-section canvas{
-  position:fixed;          /* ignore parents, lock to viewport       */
-  inset:0;                 /* top:0; right:0; bottom:0; left:0       */
-  width:100vw;             /* full visual viewport width             */
-  height:100svh;           /* full “small-viewport” height           */
-  height:100dvh;           /* fallback for browsers that support dvh */
-  object-fit:cover;        /* scale but never letter-box             */
-  backface-visibility:hidden;
-  transform:translateZ(0); /* keeps GPU compositing on Safari/iOS    */
-  pointer-events:none;     /* clicks go through to overlay buttons   */
-  z-index:0;
+  backface-visibility: hidden;
+  transform: scale(1) translateZ(0);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 1s ease;
 }
+
+/* Zoom animation */
+@keyframes canvasZoom {
+  0% {
+    transform: scale(1) translateZ(0);
+  }
+  100% {
+    transform: scale(1.2) translateZ(0);
+  }
+}
+
 /* ─── close (“✕”) button ─── */
-.close-button-jet{
-  position:absolute;top:20px;right:20px;z-index:20;
-  font-size:28px;padding:6px 12px;border-radius:6px;
-  background:rgba(0,0,0,.6);color:#fff;border:none;
-  cursor:pointer;transition:background .25s;
+.close-button-jet {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  font-size: 28px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s;
 }
-.close-close-button-jet:hover{background:rgba(0,0,0,.85);}
-
-/* ─── full-screen overlay that fades away on first scroll ─── */
-.intro-overlay{
-  position:fixed;inset:0;
-  display:flex;justify-content:center;align-items:center;
-  background:rgba(0,0,0,.82);
-  z-index:15;pointer-events:none;
-}
-.intro-text{
-  font:900 clamp(32px,7vw,90px)/1 "AGENCYFB",sans-serif;
-  color:#fff;letter-spacing:.07em;
+.close-button-jet:hover {
+  background: rgba(0, 0, 0, 0.85);
 }
 
-/* ─── tiny scroll hint at bottom centre ─── */
-.scroll-hint{
-  position:absolute;bottom:22px;left:50%;
-  transform:translateX(-50%);
-  font-family:sans-serif;font-size:14px;letter-spacing:.12rem;
-  color:#fff;text-shadow:0 0 6px rgba(0,0,0,.8);
-  animation:bob 2s infinite;pointer-events:none;
+/* ─── full-screen intro overlay ─── */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 15;
+  pointer-events: none;
 }
-@keyframes bob{
-  0%,100%{transform:translate(-50%,0);}
-  50%    {transform:translate(-50%,6px);}
+.intro-text {
+  font: 100 clamp(30px, 7vw, 10px)/1 "AGENCYFB", sans-serif;
+  color: #fff;
+  letter-spacing: 0.07em;
+}
+
+/* ─── scroll hint (bobbing down) ─── */
+.scroll-hint {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.12rem;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+  animation: bob 2s infinite;
+  pointer-events: none;
+}
+@keyframes bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, 6px); }
 }
 
 /* ─────────────────────────────────────────────
-   ❸  LOADING SPINNER (if you re-enable it)
+   ❸  LOADING SPINNER (optional)
    ───────────────────────────────────────────── */
-.loading-message{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  color:#dcdcdc;font-family:sans-serif;font-size:1rem;
-  text-align:center;z-index:100;
+.loading-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #dcdcdc;
+  font-family: sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  z-index: 100;
 }
-.spinner{
-  width:80px;height:80px;
-  border:3px solid rgba(0,0,0,.25);
-  border-top-color:#000;border-radius:50%;
-  animation:spin 1s linear infinite;margin:0 auto 1rem;
+.spinner {
+  width: 80px;
+  height: 80px;
+  border: 3px solid rgba(0, 0, 0, 0.25);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
 }
-@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 /* ─────────────────────────────────────────────
    ❹  DATA-SHEET SIGN-UP SECTION
    ───────────────────────────────────────────── */
-.data-sheet-section-jet{
-  background:#000000;
-  color:#fefcfc;text-align:center;
-  padding:90px 20px;font-family:"AGENCYFB",sans-serif;
+.data-sheet-section-jet {
+  background: #000;
+  color: #fefcfc;
+  text-align: center;
+  padding: 90px 20px;
+  font-family: "Ethnocentric", sans-serif;
 }
-.data-sheet-section h2{
-  font-size:clamp(34px,5vw,64px);
-  margin:0 0 16px;
+.h2-jet {
+  font-size: 60px;
+  margin: 0 0 2px;
 }
-.data-sheet-section p{
-  font-size:18px;max-width:700px;margin:0 auto 28px;
+.data-sheet-section p {
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto 28px;
 }
-.newsletter-form{
-  display:flex;justify-content:center;flex-wrap:wrap;gap:10px;
+.newsletter-form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.newsletter-form input{
-  padding:14px 16px;font-size:16px;
-  border:none;border-radius:6px;min-width:260px;
+.newsletter-form input {
+  padding: 14px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  min-width: 260px;
 }
-.newsletter-form button{
-  padding:14px 32px;font-size:16px;font-weight:700;
-  border:none;border-radius:6px;background:#36C5F0;color:#000;
-  cursor:pointer;transition:background .25s;
+.newsletter-form button {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  background: #36C5F0;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.25s;
 }
-.newsletter-form button:hover{background:#9fe0f4;}
+.newsletter-form button:hover {
+  background: #9fe0f4;
+}
 
 /* ─────────────────────────────────────────────
-   ❺  RESPONSIVE TWEAKS
+   ❻  Scroll-to-Top button: vertical gradient bar
    ───────────────────────────────────────────── */
-@media (max-width:768px){
-  .scroll-hint{font-size:12px;}
-  .data-sheet-section p{font-size:16px;}
-}
-@media (min-width:769px) and (max-width:1024px){
-  .heed-jet-section canvas{transform:translateZ(0) scale(1.08);}
-}
-
-
-/* ───────────────────────────────────────────── */
-/* Scroll-to-Top button: small gradient bar     */
-/* moving top → bottom and back                 */
-/* ───────────────────────────────────────────── */
 .scroll-top-button {
   position: fixed;
   right: 20px;
-  width: 4px;             /* thin line */
-  height: 100px;          /* short bar */
+  width: 4px;
+  height: 100px;
   border: none;
   padding: 0;
-
-  /* vertical gradient */
   background-image: linear-gradient(
     180deg,
-    #0025ff   0%,
-    #0054ff  16.6%,
-    #0083ff  33.3%,
-    #00b2ff  50%,
-    #00dfff  66.6%,
+    #0025ff 0%,
+    #0054ff 16.6%,
+    #0083ff 33.3%,
+    #00b2ff 50%,
+    #00dfff 66.6%,
     #b4fcff 100%
   );
   background-repeat: no-repeat;
   background-size: 100% 100%;
-
-  /* animate the bar itself up/down */
   animation: slide-down 1s linear infinite alternate;
-
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s, transform 0.2s;
@@ -169,8 +214,162 @@ heed-jet-section canvas{
   opacity: 1;
   transform: translateX(-2px);
 }
-
 @keyframes slide-down {
   0%   { top: 20px; }
-  100% { top: calc(100vh - 20px - 100px); }
+  100% { top: calc(100vh - 120px); }
+}
+
+input::placeholder {
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: 14px; /* optional */
+}
+
+
+
+.progress-overlay-jet {
+  position: fixed;
+  bottom: 60vh;             /* ~40% from bottom of screen */
+  left: -4vw;               /* small offset left (2% of width) */
+  width: 12vw;              /* 12% of screen width */
+  height: 0.6vh;            /* thickness scales with height */
+  display: flex;
+  justify-content: flex-start;
+  z-index: 4;
+  pointer-events: none;
+}
+.progress-overlay-jet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(90deg);
+}
+
+/* ──────────────────────────────── */
+/* BOTTOM: Underlined progress bar */
+.progress-overlay-under {
+  position: relative;
+  bottom: 1vh;              /* push up from bottom slightly */
+  left: 20vw;               /* offset from the left */
+  width: 56vw;              /* responsive width */
+  height: 0.4vh;            /* thickness based on screen height */
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+  margin-top: 0;
+  pointer-events: none;
+}
+.progress-overlay-under img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+.frame-loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.frame-loader::after {
+  content: "";
+  width: 48px;
+  height: 48px;
+  border: 5px solid #2d6bff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg) } }
+
+
+
+
+/* ─────────────────────────────────────────────
+   TABLET  (769 – 1024 px)
+───────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1045px) {
+
+  /* hero wrapper + canvas */
+  .heed-jet-section { height: 100vh; }
+  .heed-jet-section canvas {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;              /* crop sides, no black bars */
+  }
+
+  /* intro text a bit smaller */
+  .intro-text { font-size: clamp(20px, 5vw, 36px); }
+
+  /* close button */
+  .close-button-jet { font-size: 24px; padding: 5px 10px; }
+
+  /* progress bars slightly larger so they still “feel” long */
+  .progress-overlay-jet {
+    width: 15vw;
+    height: 0.8vh;
+  }
+  .progress-overlay-jet  { left: -9vh;  }
+  .progress-overlay-under {
+    width: 80vw;
+    left : 9vw;
+    height: 0.5vh;
+  }
+
+  /* data‑sheet section */
+  .data-sheet-section-jet { padding: 80px 30px; }
+  .data-sheet-section-jet h2 { font-size: clamp(32px, 6vw, 52px) !important; }
+  .data-sheet-section-jet p  { font-size: 16px; }
+
+  .newsletter-form input,
+  .newsletter-form button { font-size: 15px; padding: 12px 14px; }
+}
+
+/* ─────────────────────────────────────────────
+   PHONE  (≤ 768 px)
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* hero & canvas fill, crop sides */
+  .heed-jet-section canvas {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* intro overlay text */
+  .intro-text { font-size: clamp(16px, 6vw, 26px); }
+
+  /* close button smaller */
+  .close-button-jet { font-size: 20px; padding: 4px 8px; top: 12px; right: 12px; }
+
+  /* progress bars shorter and centred visually */
+  .progress-overlay-jet{
+    width: 15vw;
+    height: 1vh;
+  }
+  .progress-overlay-jet       { left: -2vw; }
+  /* .progress-overlay-right     { right: -20vw; } */
+  .progress-overlay-under     { width: 72vw; left: 12vw; height: 0.6vh; }
+
+  /* data‑sheet section tighter */
+  .data-sheet-section-jet { padding: 60px 20px; }
+  .data-sheet-section-jet h2 { font-size: clamp(26px, 8vw, 35px); }
+  .data-sheet-section-jet p  { font-size: 15px; }
+
+  /* form fields full‑width on small phones */
+  .newsletter-form {flex-direction: column; align-items: center; gap: 15px;}
+
+  .newsletter-form button { width: 30vw; font-size: 14px; }
+  .newsletter-form input {
+        min-width: auto;
+        max-width: 250px;
+  }
+
+  /* scroll‑to‑top gradient bar: shorter */
+  .scroll-top-button { height: 80px; right: 14px; }
 }

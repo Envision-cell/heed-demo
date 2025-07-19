@@ -29,14 +29,14 @@
   font-size:28px;
   line-height:1;
   background:rgb(255, 254, 254);
-  color:#121212db;
+  /* color:#fbfafadb; */
   border:none;
   padding:8px 12px;
   border-radius:6px;
   cursor:pointer;
   transition:background .25s;
 }
-.close-button-ejet:hover{background:rgba(0,0,0,.9);}
+/* .close-button-ejet:hover{background:rgba(0,0,0,.9);} */
 
 /* small hint inside pinned section */
 .scroll-hint{
@@ -73,7 +73,7 @@
 
 /* central word “SCROLL” */
 .intro-text{
-  font:900 clamp(32px,7vw,86px)/1 "AGENCYFB",sans-serif;
+  font:100 clamp(30px,7vw,10px)/1 "AGENCYFB",sans-serif;
   color:#fff;
   letter-spacing:.06em;
 }
@@ -86,16 +86,17 @@
   color:#070707;
   text-align:center;
   padding:90px 20px;
-  font-family:"AGENCYFB",sans-serif;
+  font-family:"Ethnocentric",sans-serif;
 }
 .data-sheet-section h2{
   font-size:clamp(34px,5vw,60px);
-  margin:0 0 14px;
+  margin:20px 20px 14px;
 }
 .data-sheet-section p{
-  font-size:18px;
+  font-size:12px;
   max-width:680px;
-  margin:0 auto 28px;
+  margin-left: "-300px";
+
 }
 
 .newsletter-form{
@@ -224,4 +225,212 @@
 @keyframes slide-down {
   0%   { top: 20px; }
   100% { top: calc(100vh - 20px - 100px); }
+}
+
+
+/* 
+.progress-overlay-under-ejet {
+  position: relative;
+  bottom: 20px;            
+  left: 535px;
+  width: 27%;       
+  height: 4px;    
+  display: flex;
+  justify-content: right;
+  z-index: 2;
+  margin-top: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+.progress-overlay-under-ejet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progress-overlay-ejet {
+  position: fixed;
+  bottom: 400px;          
+  left: -50px;
+  width: 12%;        
+  height: 5px;      
+  display: flex;
+  justify-content: left;
+  z-index: 4;
+  pointer-events: none;
+}
+.progress-overlay-ejet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(90deg); 
+
+} */
+
+
+
+.progress-overlay-ejet {
+  position: fixed;
+  bottom: 56vh;              /* Position from bottom of viewport */
+  left: -4vw;                /* Slightly offscreen to the left */
+  width: 12vw;               /* Width relative to screen width */
+  height: 0.6vh;             /* Thin progress bar */
+  display: flex;
+  justify-content: flex-start;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.progress-overlay-ejet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotate(90deg);  /* Vertical orientation */
+}
+
+/* ─── BOTTOM: Underline progress bar (right-aligned) ─── */
+.progress-overlay-under-ejet {
+  position: relative;
+  bottom: 2vh;               /* Spacing from element below */
+  left: 35vw;                /* Position from left side */
+  width: 27vw;               /* Width of the bar */
+  height: 0.4vh;             /* Bar thickness */
+  display: flex;
+  justify-content: flex-end;
+  z-index: 2;
+  margin: 0;
+  pointer-events: none;
+}
+
+.progress-overlay-under-ejet img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+.frame-loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.frame-loader::after {
+  content: "";
+  width: 48px;
+  height: 48px;
+  border: 5px solid #2d6bff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg) } }
+
+
+
+
+.heed-ejet-section.hidden-white {
+  background-color: #ffffff !important;   /* pure white, overrides any other bg */
+}
+
+
+/* ─────────────────────────────────────────────
+   TABLET  (769 – 1024 px)
+───────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1045px) {
+
+  /* canvas fills but crops sides to avoid black bars */
+  .heed-ejet-section canvas {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* intro “SCROLL” text a bit smaller */
+  .intro-text { font-size: clamp(22px, 5vw, 36px); }
+
+  /* close‑button slightly smaller */
+  .close-button-ejet { font-size: 24px; padding: 6px 10px; }
+
+  /* progress bars wider so they feel the same length */
+  .progress-overlay-ejet {
+    bottom: 58vh;
+    left: -6vw;
+    width: 18vw;
+    height: 0.8vh;
+  }
+  .progress-overlay-under-ejet {
+    bottom: 3vh;
+    left: 28vw;
+    width: 37vw;
+    height: 0.5vh;
+  }
+
+  /* data‑sheet section tighter */
+  .data-sheet-section {
+    padding: 80px 28px;
+  }
+  .data-sheet-section h2 { font-size: clamp(30px, 6vw, 50px); }
+  .data-sheet-section p  { font-size: 16px; }
+
+  .newsletter-form input,
+  .newsletter-form button { font-size: 15px; padding: 12px 14px; }
+
+  /* scroll‑top gradient bar shorter */
+  .scroll-top-button { height: 90px; right: 16px; }
+}
+
+/* ─────────────────────────────────────────────
+   PHONE  (≤ 768 px)
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* canvas covers viewport fully */
+  .heed-ejet-section canvas {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
+
+  /* intro text smaller */
+  .intro-text { font-size: clamp(18px, 6vw, 28px); }
+
+  /* close‑button compact */
+  .close-button-ejet { font-size: 20px; padding: 4px 8px; top: 12px; right: 12px; }
+
+  /* progress bars shorter & centred visually */
+  .progress-overlay-ejet {
+    bottom: 60vh;
+    left: -4vw;
+    width: 15vw;
+    height: 1vh;
+  }
+  .progress-overlay-under-ejet {
+    bottom: 2vh;
+    left: 27vw;
+    width: 40vw;
+    height: 0.6vh;
+  }
+
+  /* data‑sheet section */
+  .data-sheet-section {
+    padding: 60px 20px;
+  }
+  .data-sheet-section h2 { font-size: clamp(26px, 8vw, 38px); }
+  .data-sheet-section p  { font-size: 9px; }
+
+  /* form fields stack full‑width */
+  .newsletter-form { flex-direction: column; gap: 12px; }
+  /* .newsletter-form input,
+  .newsletter-form button { width: 100%; font-size: 14px; } */
+
+  /* spinner smaller */
+  .spinner { width: 50px; height: 50px; border-width: 2px; }
+
+  /* scroll‑top bar */
+  .scroll-top-button { height: 80px; right: 14px; }
 }

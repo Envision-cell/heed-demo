@@ -1,8 +1,9 @@
-/* ───────────────────────────────────────────── */
-/* Home & Hero/Footer Seam Overlay Styles       */
-/* ───────────────────────────────────────────── */
-
-/* Ensure no gaps between hero & footer */
+/* ─────────────────────────────────────────────
+   Home & Hero / Footer Seam Overlay Styles
+   Desktop base  ≥ 1025 px
+───────────────────────────────────────────── */
+html, body { overflow‑x: hidden; }
+/* Reset hero + footer margins/padding */
 .hero-page-wrapper,
 .hero-banner,
 .footer-wrapper {
@@ -10,218 +11,162 @@
   padding: 0;
 }
 
-/* Wrap everything so the seam‐overlay can be absolute */
-.hero-page-wrapper {
-  position: relative;
-}
+/* Base stacking contexts */
+.hero-page-wrapper { position: relative; }
+.footer-wrapper    { position: relative; z-index: 1; background: transparent; }
 
-/* Footer wrapper: let the real Footer show its own background/image */
-.footer-wrapper {
-  position: relative;
-  z-index: 1;
-  background-color: transparent; /* allow Footer’s own background/image to show */
-}
-
-/* The seam‐overlay bar */
+/* Seam overlay */
 .seam-overlay {
   position: absolute;
-  top: calc(100vh - 40px); /* 100vh minus half its height (80px/2) */
+  /* top: calc(100vh - 4px); */
   left: 0;
   width: 100%;
-  height: 80px;            /* adjust to your overlay’s actual height */
+  height: 80px;
   overflow: hidden;
   pointer-events: none;
-  z-index: 2;              /* sits above hero & footer visuals */
-  opacity: 0;              /* JS will fade this in when in footer */
+  z-index: 2;
+  opacity: 0;
 }
+.seam-overlay__video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* make the seam‐overlay video fill its container */
-.seam-overlay__video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+/* ── Hero (desktop) ── */
+.hero-banner      { position: relative; width: 100%; height: 100vh; overflow: hidden; font-family: 'Ethnocentric', sans-serif; }
+.video-banner     { position: absolute; inset: 0; width: 100vw; height: 100vh; z-index: 1; overflow: hidden; background: #000; }
+.background-video { width: 100vw; height: 100vh; object-fit: fill; object-position: center; display: block; background: #000; }
 
-
-
-/* ───────────────────────────────────────────── */
-/* ➊ Hero wrapper (Desktop default ≥1025px)      */
-/* ───────────────────────────────────────────── */
-.hero-banner {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  font-family: "AGENCYFB", sans-serif;
-}
-
-/* ➋ Video always behind everything */
-.video-banner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  overflow: hidden;
-  background-color: #000;
-}
-.video-banner .background-video {
-  width: 100vw;
-  height: 100vh;
-  object-fit: fill;
-  object-position: center;
-  display: block;
-  background-color: #000;
-}
-
-/* ➌ Loader overlay */
 .loader-overlay,
-.loading-screen {
-  position: absolute;
-  top: 50;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  font-size: 1.5rem;
-  z-index: 10;
-}
+.loading-screen { position: absolute; inset: 0; height: 100vh; background: rgba(0,0,0,.7); display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1.5rem; z-index: 10; }
 
-/* ➍ Banner overlay (text + buttons) */
-.banner-overlay {
-  position: absolute;
-  bottom: 50px;
-  width: 100%;
-  text-align: center;
-  color: #fff;
-  z-index: 5;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-  padding: 0 10px;
-}
+.banner-overlay  { position: absolute; bottom: 150px; width: 100%; text-align: center; color: #fff; z-index: 5; text-shadow: 2px 2px 6px rgba(0,0,0,.6); padding: 0 10px; }
 
-/* ➎ Buttons container – lifted upward */
-.banner-buttons {
-  margin-top: 3rem;
-  transform: translateY(-20px);
-  display: flex;
-  gap: 7rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+.heed-header     { width: 100%; background: transparent; border: none; border-radius: 10px; margin: 2px auto 8px; display: flex; justify-content: center; align-items: center; height: 80px; box-sizing: border-box; box-shadow: none; }
 
-/* ➏ CTA button styles – Transparent */
-.cta-button {
-  width: 500px;
-  height: 120px;
-  background-color: transparent;
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  border: 2px solid transparent;
-  border-radius: 20px;
-  box-shadow: 0 0 calc(25px * var(--glow, 0)) rgba(54, 197, 240, var(--glow, 0));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transform: scale(var(--scale, 1));
-  transition: background-color 0.3s, color 0.3s, transform 0.2s, border 0.3s;
-}
-.cta-button:hover {
-  background-color: #36C5F0;
-  color: #000;
-  border: 2px solid #36C5F0;
-  transform: scale(1.05);
-}
+.scroll-down { margin-top: 150px; background: transparent; border: none; font-size: 2rem; color: #fff; cursor: pointer; animation: bounce 5s infinite; }
+@keyframes bounce { 0%,20%,50%,80%,100%{transform:translateY(0);} 40%{transform:translateY(5px);} 60%{transform:translateY(3px);} }
 
-/* ➐ Header (logo removed) */
-.heed-header {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-radius: 10px;
-  margin: 2px auto 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80px;
-  box-sizing: border-box;
-  box-shadow: none;
-}
+.hero-fade { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; background: linear-gradient(to bottom,rgba(0,0,0,0)0%,rgba(0,0,0,1)100%); pointer-events: none; z-index: 3; }
 
-/* ➑ Scroll-down arrow */
-.scroll-down {
-  margin-top: 2rem;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: #fff;
-  cursor: pointer;
-  animation: bounce 5s infinite;
-}
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(5px); }
-  60% { transform: translateY(3px); }
-}
+.banner-labels { position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%); display: flex; margin-top: 100px; }
+.cta-label      { flex: 0 0 50%; text-align: center; font-size: clamp(1.5rem,3vw,2.5rem); font-weight: 600; color: #fff; cursor: pointer; user-select:none; opacity: 1; transition: opacity .25s ease; pointer-events:auto; }
+.cta-label.left  { padding-left: 10px;  }
+.cta-label.right { padding-right: 10px; }
 
-/* Tablet View (769px – 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .banner-overlay { bottom: 120px; font-size: 1.5rem; padding: 0 20px; }
-  .banner-buttons { margin-top: 4rem; gap: 1.5rem; transform: translateY(-10px); }
-  .cta-button     { width: 350px; height: 150px; font-size: 1.5rem; border-radius: 16px; }
-  .heed-header    { height: 70px; border-radius: 8px; margin: 4px auto 6px; }
-  .scroll-down    { font-size: 1.8rem; margin-top: 1.5rem; }
+.seam-bridge,
+.seam-bridge--bottom { position: absolute; width: 100%; object-fit: cover; pointer-events: none; z-index: 2; }
+
+.seam-bridge          { left: 0; height: 200px; }
+.seam-bridge--bottom  { bottom: -30px; left: -646px; width: 150%; height: 150px; object-position: top; }
+
+.label-zone { display: flex; justify-content: space-between; align-items: center; position: relative; width: 100%; padding: 0 40px; }
+.label-wrap { position: relative; display: flex; align-items: center; }
+.label-wrap.left  .bar-line,
+.label-wrap.right .bar-line { position: absolute; top: 50%; height: 4px; transform: translateY(-50%); z-index: 1; }
+.label-wrap.left  .bar-line { left: 0;  }
+.label-wrap.right .bar-line { right: 0; }
+
+.progress-overlay,
+.progress-overlay-right { position: absolute; top: 93vh; width: 25vw; height: 0.7vh; display: flex; z-index: 4; pointer-events: none; }
+.progress-overlay       { left: -12vh; justify-content: flex-start; }
+.progress-overlay-right { right: -11vh; justify-content: flex-end; }
+.progress-overlay img,
+.progress-overlay-right img { width: 100%; height: 100%; object-fit: cover; transform: rotate(180deg); }
+
+.loading-screen { opacity: 0; transition: opacity .4s ease; }
+.hero-banner.ready .loading-screen { opacity: 0; pointer-events: none; }
+
+/* ─────────────────────────────────────────────
+   Tablet (769 – 1024 px)
+───────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1045px) {
+
+  .background-video { object-fit: cover; }
+
+  /* scale everything slightly smaller */
+  .banner-overlay    { bottom: 120px; font-size: 1.5rem; padding: 0 20px; }
+  .heed-header       { height: 70px; border-radius: 8px; margin: 4px auto 6px; }
+  .scroll-down       { font-size: 1.8rem; margin-top: 1.5rem; }
   .loader-overlay,
-  .loading-screen { font-size: 1.3rem; padding: 0 30px; }
+  .loading-screen    { font-size: 1.3rem; padding: 0 30px; }
+
+  /* labels */
+  .cta-label         { font-size: clamp(1.2rem,2.6vw,1.9rem);   margin-bottom: 40px; }
+
+  /* progress bars longer so they read similarly on narrower viewport */
+  .progress-overlay {
+    top: 93vh;
+    width: 35.6vw;;
+    height: 0.8vh;
+  }
+
+  .progress-overlay-right {
+    top: 93vh;
+    width: 35.6vw;;
+    height: 0.8vh;
+  }
+  .progress-overlay       { left: -27vh; }
+  .progress-overlay-right { right: -30vh; }
+  .seam-bridge--bottom {
+      bottom: -30px;
+      left: -646px;
+      width: 170%;
+      height: 150px;  
+      object-position: top;
+  }
+    
 }
 
-/* Mobile View (≤768px) */
+/* ─────────────────────────────────────────────
+   Phone (≤ 768 px)
+───────────────────────────────────────────── */
 @media (max-width: 768px) {
+
+  .background-video { object-fit: cover; }
+
+  /* overlay & elements */
   .banner-overlay { bottom: 80px; font-size: 1.2rem; padding: 0 15px; }
-  .banner-buttons { margin-top: 7rem; gap: 1rem; flex-direction: column; align-items: center; transform: translateY(-15px); }
-  .cta-button     { width: 90%; height: 70px; font-size: 1.3rem; border-radius: 14px; }
-  .heed-header    { height: 60px; border-radius: 0; margin: 0; }
+  .heed-header    { height: 60px; border-radius: 0;   margin: 0; }
   .scroll-down    { font-size: 1.4rem; margin-top: 1rem; }
   .loader-overlay,
   .loading-screen { font-size: 1.1rem; padding: 0 20px; text-align: center; }
+
+  /* mobile buttons stacked (keep your existing flex‑column rule) */
+  .banner-labels { margin-top: 3rem; gap: 1rem; flex-direction: row; align-items: center; transform: translateY(-15px);}
+
+  /* labels shrink */
+  .cta-label { margin-bottom:100px clamp(1rem,4vw,1.5rem); }
+
+  /* progress bars shorter & centred visually */
+  .progress-overlay{
+    top: 94vh;
+    width: 39vw;
+    height: 1vh;
+  }
+  .progress-overlay-right {
+    top: 94vh;
+    width: 35vw;
+    height: 1vh;
+  }
+  .progress-overlay       { left: -20vw; }
+  .progress-overlay-right { right: -20vw; }
+
+   .seam-bridge--bottom {
+      bottom: -20px;
+      left: -646px;
+      width: 190%;
+      height: 150px;  
+      object-position: top;
+  }
 }
 
-/* Sweep line – banded blue-cyan (lowered) */
-.sweep-line {
-  position: absolute;
-  top: 68%;
-  left: -100%;
-  width: 100%;
-  height: 8px;
-  border-radius: 2px;
-  pointer-events: none;
-  z-index: 1;
-  background-image: linear-gradient(
-    90deg,
-    #0025ff 0%,    #0025ff 16.6%,
-    #0054ff 16.6%, #0054ff 33.3%,
-    #0083ff 33.3%, #0083ff 50%,
-    #00b2ff 50%,   #00b2ff 66.6%,
-    #00dfff 66.6%, #00dfff 83.3%,
-    #b4fcff 83.3%, #b4fcff 100%
-  );
-}
 
-/* Hero → Footer Fade */
-.hero-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
-  pointer-events: none;
-  z-index: 3;
+
+@media (max-width: 589px){
+  .seam-bridge--bottom {
+      bottom: -20px;
+      left: -646px;
+      width: 200%;
+      height: 150px;  
+      object-position: top;
+  }
+
 }

@@ -4,8 +4,8 @@
 .footer {
   position: relative;
   width: 100%;
-  padding: 40px 20px;
-  font-family: "Agency FB", sans-serif;
+  padding: 10px 10px;
+  font-family: "Meiryo", sans-serif;
   overflow-x: hidden;
   overflow-y: hidden;
   color: #dcc9c9;
@@ -52,6 +52,7 @@
   justify-content: space-between;
   position: relative;
   z-index: 1;
+  margin-top: 28px;
 }
 
 /* Section Base */
@@ -145,8 +146,8 @@
 /* Footer Bottom */
 .footer-bottom {
   text-align: center;
-  margin-top: 40px;
-  padding-top: 20px;
+  margin-top: 5px;
+  padding-top: 10px;
   font-size: 18px;
   color: #eee;
   position: relative;
@@ -154,63 +155,7 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Slide-in Animation */
-.newsletter-section,
-.footer-bottom-text {
-  opacity: 0;
-  transform: translateX(100px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
 
-.newsletter-section.slide-in-left,
-.footer-bottom-text.slide-in-left {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* ───────────────────────────────────────────── */
-/* Tablet View (769px – 1024px)                  */
-/* ───────────────────────────────────────────── */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .footer-container {
-    gap: 32px;
-    justify-content: space-around;
-  }
-
-  .footer-section {
-    flex: 1 1 45%;
-    min-width: unset;
-  }
-
-  .footer-section h4 {
-    font-size: 17px;
-  }
-
-  .footer-section p,
-  .footer-section ul li,
-  .footer-section a {
-    font-size: 17px;
-  }
-
-  .social-icons {
-    gap: 1rem;
-  }
-
-  .newsletter-section input[type="email"] {
-    width: 80%;
-    max-width: none;
-  }
-
-  .newsletter-section button {
-    width: auto;
-    padding: 10px 20px;
-  }
-
-  .footer-bottom {
-    font-size: 17px;
-    padding-top: 18px;
-  }
-}
 
 /* ───────────────────────────────────────────── */
 /* Mobile View (≤768px)                          */
@@ -256,3 +201,92 @@
     font-size: 16px;
   }
 }
+
+
+
+.footer { position: relative; overflow: hidden; }
+
+.footer-seam-bridge {
+ position: absolute;
+  left: -5px;
+  width: 100%;
+  height: 40px;        
+  object-fit: cover;   
+  pointer-events: none;
+  z-index: 2;
+}
+ 
+.seam-bridge--top {
+      position: absolute;
+    top: 0;
+    left: -185px;
+    width: 150%;
+    height: 25px;
+    object-fit: cover;
+    object-position: bottom;
+    z-index: 2;            
+}          
+
+
+
+
+
+/* ───────────────────────────────────────────── */
+/* Tablet View (769px – 1024px)                  */
+/* ───────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1045px) {
+  .footer-container {
+    gap: 32px;
+    justify-content: space-around;
+  }
+
+  .footer-section {
+    flex: 1 1 45%;
+    min-width: unset;
+  }
+
+  .footer-section h4 {
+    font-size: 17px;
+  }
+
+  .footer-section p,
+  .footer-section ul li,
+  .footer-section a {
+    font-size: 17px;
+  }
+
+  .social-icons {
+    gap: 1rem;
+  }
+
+  .newsletter-section input[type="email"] {
+    width: 80%;
+    max-width: 30%;
+  }
+
+  .newsletter-section button {
+    width: auto;
+    padding: 10px 20px;
+    margin-top: 0;
+  }
+
+  .footer-bottom {
+    font-size: 17px;
+    padding-top: 18px;
+  }
+
+  
+.seam-bridge--top {
+  position: absolute;
+  top: 0;               
+  left: -190px;
+  width: 135%;
+  height: 25px;         
+  object-fit: cover;
+  object-position: bottom;
+  z-index: 2;             
+}
+
+}
+
+

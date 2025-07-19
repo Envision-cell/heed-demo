@@ -1,64 +1,98 @@
-// /* eslint-disable react-hooks/exhaustive-deps */
-// import React, { useLayoutEffect, useRef, useState, forwardRef } from "react";
+
+// /* ─────────────────────────────────────────────
+//    Jetboard.js  (Create-React-App / Webpack)
+// ───────────────────────────────────────────── */
+// import React, {
+//   useLayoutEffect,
+//   useRef,
+//   useState,
+//   forwardRef
+// } from "react";
+
 // import { gsap } from "gsap";
 // import { ScrollTrigger } from "gsap/ScrollTrigger";
 // import { useNavigate } from "react-router-dom";
 // import { killSectionScrollTriggers } from "../helpers/gsap-utils";
+
 // import "../components/JetBoard.css";
+// import lineImg from "../assets/line.gif";
 
 // gsap.registerPlugin(ScrollTrigger);
 
+// /* ───────── ❶  GLOBAL CACHE (lives entire tab) ───────── */
+// const cachedFrames = [];         // will hold 103 Image objects
+// let   framesReady  = false;
+
+// /* ───────── ❷  CONSTANTS ───────── */
+// const FRAME_COUNT        = 103;
+// const SCROLL_DISTANCE    = 6500;
+// const BASE_DAMPING       = 0.3;
+// const framePath = (i) =>
+//   `/images/jetframes/heed0001${String(i).padStart(3, "0")}.png`;
+
+// /* ───────── ❸  COMPONENT ───────── */
 // const Jetboard = forwardRef((props, outerRef) => {
-//   /* ───────── refs / state ───────── */
-//   const canvasRef     = useRef(null);
-//   const containerRef  = useRef(null);
-//   const overlayRef    = useRef(null);   // ① FULL-SCREEN overlay
-//   const images        = useRef([]);
-//   const navigate      = useNavigate();
+//   const containerRef = useRef(null);
+//   const canvasRef    = useRef(null);
+//   const overlayRef   = useRef(null);
+//   const images       = useRef([]);
+//   const navigate     = useNavigate();
 
-//   const [imagesLoaded, setImagesLoaded] = useState(false);
-//   const [isClosed,     setIsClosed]     = useState(false);
+//   const [loaded,  setLoaded]  = useState(false);
+//   const [closed,  setClosed]  = useState(false);
 
-//   /* ───────── constants ───────── */
-//   const frameCount        = 103;
-//   const scrollDistance    = 6500;
-//   const baseDampingFactor = 0.3;
-//   const currentFrame = (i) =>
-//     `/images/jetframes/heed0001_${String(1000 + i).padStart(1, "0")}.png`;
-
-//   /* ───────── preload PNG frames ───────── */
+//   /* ─── preload PNG frames (one-time per tab) ─── */
 //   useLayoutEffect(() => {
+//     /* Skip network if already in cache */
+//     if (framesReady) {
+//       images.current = cachedFrames;
+//       setLoaded(true);
+//       return;
+//     }
+
+//     /* First visit – actually load */
 //     let mounted = true;
-//     const load = idx =>
-//       new Promise(res => {
+//     const load = (idx) =>
+//       new Promise((res) => {
 //         const img = new Image();
 //         img.onload  = () => { if (mounted) images.current[idx] = img; res(); };
 //         img.onerror = res;
-//         img.src     = currentFrame(idx);
+//         img.decoding = "async";
+//         img.src     = framePath(idx);
 //       });
 
 //     (async () => {
-//       for (let i = 0; i < frameCount; i += 4) {
+//       for (let i = 0; i < FRAME_COUNT; i += 20) {
 //         await Promise.all(
-//           Array.from({ length: 4 }, (_, k) => (i + k < frameCount ? load(i + k) : null))
+//           Array.from({ length: 20 }, (_, k) =>
+//             i + k < FRAME_COUNT ? load(i + k) : null
+//           )
 //         );
 //       }
-//       if (mounted) setImagesLoaded(true);
+//       if (!mounted) return;
+
+//       /* copy into module cache for later visits */
+//       framesReady = true;
+//       cachedFrames.length = FRAME_COUNT;
+//       for (let i = 0; i < FRAME_COUNT; i++) cachedFrames[i] = images.current[i];
+
+//       setLoaded(true);
 //     })();
 
-//     return () => { mounted = false; images.current = []; };
+//     return () => { mounted = false; };
 //   }, []);
 
-//   /* ───────── GSAP: canvas frames + overlay fade ───────── */
+//   /* ─── GSAP: canvas scrub + overlay fade ─── */
 //   useLayoutEffect(() => {
-//     if (!imagesLoaded) return;
+//     if (!loaded || closed) return;
 
 //     const ctxScope = gsap.context(() => {
 //       const canvas = canvasRef.current;
 //       const ctx2d  = canvas.getContext("2d");
 
-//       const draw = idx => {
-//         const img = images.current[idx % frameCount];
+//       /* draw helper */
+//       const draw = (idx) => {
+//         const img = images.current[idx % FRAME_COUNT];
 //         if (!img) return;
 
 //         const dpr = window.devicePixelRatio || 1;
@@ -69,7 +103,6 @@
 //         canvas.height = ch * dpr;
 //         canvas.style.width  = `${cw}px`;
 //         canvas.style.height = `${ch}px`;
-
 //         ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
 
 //         const scale = Math.min(cw / img.width, ch / img.height);
@@ -80,12 +113,12 @@
 //         ctx2d.drawImage(img, x, y, img.width * scale, img.height * scale);
 //       };
 
-//       /* resize => draw first frame */
+//       /* initial resize */
 //       const onResize = () => draw(0);
 //       window.addEventListener("resize", onResize);
 //       onResize();
 
-//       /* pinned canvas scrolling */
+//       /* scroll-scrub */
 //       let cur = 0, lastT = 0, lastY = 0, vel = 0;
 //       gsap.to({ t: 0 }, {
 //         t: 1,
@@ -93,102 +126,157 @@
 //         scrollTrigger: {
 //           trigger : containerRef.current,
 //           start   : "top top",
-//           end     : `+=${scrollDistance}`,
+//           end     : `+=${SCROLL_DISTANCE}`,
 //           scrub   : true,
 //           pin     : true,
-//           onUpdate:self=>{
+//           onUpdate(self) {
 //             const now = performance.now();
-//             if (lastT){
-//               const dt = (now-lastT)/1000;
-//               const dy = self.scroll()-lastY;
-//               vel = vel*.8 + (dy/dt)*.2;
+//             if (lastT) {
+//               const dt = (now - lastT) / 1000;
+//               const dy = self.scroll() - lastY;
+//               vel = vel * 0.8 + (dy / dt) * 0.2;
 //             }
 //             lastT = now; lastY = self.scroll();
 
-//             const damp   = Math.min(.5, baseDampingFactor + Math.abs(vel)/2000);
-//             const target = self.progress * frameCount;
-//             cur += (target-cur)*damp;
-//             if (Math.abs(target-cur) < .5) cur = target;
+//             const damp   = Math.min(0.5, BASE_DAMPING + Math.abs(vel) / 2000);
+//             const target = self.progress * FRAME_COUNT;
+//             cur += (target - cur) * damp;
+//             if (Math.abs(target - cur) < 0.5) cur = target;
 //             draw(Math.round(cur));
 //           }
 //         }
 //       });
 
-//       /* full-screen overlay fades in first 250 px of page scroll */
+//       /* overlay fade in first 250 px */
 //       ScrollTrigger.create({
-//         start : 0,
-//         end   : 250,
-//         scrub : true,
-//         onUpdate:self=>{
-//           gsap.set(overlayRef.current,{ autoAlpha: 1 - self.progress });
-//         }
+//         start: 0,
+//         end: 250,
+//         scrub: true,
+//         onUpdate: (self) =>
+//           gsap.set(overlayRef.current, { autoAlpha: 1 - self.progress })
 //       });
 
 //       return () => window.removeEventListener("resize", onResize);
 //     }, containerRef);
 
 //     return () => ctxScope.revert();
-//   }, [imagesLoaded]);
+//   }, [loaded, closed]);
 
-//   /* ───────── close handler ───────── */
+//   /* ─── Handlers ─── */
 //   const handleClose = () => {
 //     killSectionScrollTriggers(containerRef.current);
-//     gsap.set(containerRef.current, { clearProps:"all" });
-//     setIsClosed(true);
+//     gsap.set(containerRef.current, { clearProps: "all" });
+//     setClosed(true);
 //     navigate("/");
 //   };
 
-//   if (isClosed) return null;
+//   /* ─── Loader on first visit only ─── */
+//   if (!loaded) return <div className="frame-loader" />;
+//   if (closed)   return null;
 
-//   /* ───────── JSX ───────── */
+//   /* ─── JSX ─── */
 //   return (
 //     <>
-//       {/* 3-D scroll-pinned canvas */}
 //       <div
-//         ref={el=>{
+//         ref={(el) => {
 //           containerRef.current = el;
 //           if (outerRef) outerRef.current = el;
 //         }}
 //         className="heed-ejet-section"
 //       >
-//         <button className="close-button" onClick={handleClose}>✕</button>
+//         <button className="close-button-ejet" onClick={handleClose}>✕</button>
 
-//         {/* FULL-SCREEN OVERLAY (fades out) */}
+//         {/* left vertical bar */}
+//         <div className="progress-overlay-ejet">
+//           <img src={lineImg} alt="" />
+//         </div>
+
+//         {/* scroll label */}
 //         <div ref={overlayRef} className="intro-overlay">
-//           <span className="intro-text">SCROLL</span>
+//           <span className="intro-text" style={{ fontFamily: "Ethnocentric" }}>
+//             SCROLL
+//           </span>
 //         </div>
 
 //         <canvas ref={canvasRef} />
-
 //       </div>
 
-//       {/* ----- data-sheet signup ----- */}
+//       {/* DATA SHEET SECTION */}
 //       <section className="data-sheet-section">
-//         <h2>DATA&nbsp;SHEET</h2>
-//         <p>Want the full technical PDF? Drop your email – we’ll send it right away.</p>
+//         <h2 style={{ marginBottom: "30px" }}>DATA&nbsp;SHEET</h2>
+
+//         <div className="progress-overlay-under-ejet">
+//           <img src={lineImg} alt="" />
+//         </div>
+
+//         <div
+//           style={{
+//             width: "100%",
+//             display: "flex",
+//             justifyContent: "center",
+//             marginBottom: "20px"
+//           }}
+//         >
+//           <p
+//             style={{
+//               fontFamily: "Meiryo, sans-serif",
+//               fontSize: "12px",
+//               whiteSpace: "nowrap",
+//               margin: 0,
+//               marginLeft: "-200px"
+//             }}
+//           >
+//             ACCESS THE TECHNICAL SPEC PDF. SUBMIT YOUR EMAIL BELOW AND WE’LL
+//             SEND THE COMPLETE TECHNICAL DOCUMENT STRAIGHT TO YOUR INBOX.
+//           </p>
+//         </div>
 
 //         <form
 //           className="newsletter-form"
-//           onSubmit={async e=>{
+//           onSubmit={async (e) => {
 //             e.preventDefault();
 //             const email = e.target.email.value;
-//             try{
-//               const rsp = await fetch("http://heedjetboards.com:3000/users",{
-//                 method:"POST",
-//                 headers:{ "Content-Type":"application/json" },
-//                 body:JSON.stringify({ email })
+//             try {
+//               const rsp = await fetch("http://heedjetboards.com:3000/users", {
+//                 method: "POST",
+//                 headers: { "Content-Type": "application/json" },
+//                 body: JSON.stringify({ email })
 //               });
 //               const js = await rsp.json();
-//               alert(js.success ? "Check your inbox!" : (js.error||"Please try again"));
+//               alert(
+//                 js.success
+//                   ? "Check your inbox!"
+//                   : js.error || "Please try again"
+//               );
 //               if (js.success) e.target.reset();
-//             }catch{ alert("Something went wrong, please retry."); }
+//             } catch {
+//               alert("Something went wrong, please retry.");
+//             }
 //           }}
 //         >
-//           <input type="email" name="email" placeholder="Your email" required/>
-//           <button type="submit">Send&nbsp;PDF</button>
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder="YOUR EMAIL"
+//             required
+//             style={{
+//               padding: "10px 14px",
+//               fontSize: "14px",
+//               fontFamily: "Meiryo, sans-serif",
+//               boxShadow: "0 2px 6px rgba(0,0,0,.15)",
+//               border: "1px solid #ccc",
+//               borderRadius: "6px",
+//               outline: "none"
+//             }}
+//           />
+//           <button
+//             type="submit"
+//             style={{ fontFamily: "OCTA, sans-serif", color: "white" }}
+//           >
+//             Send&nbsp;PDF
+//           </button>
 //         </form>
 //       </section>
-
 //     </>
 //   );
 // });
@@ -196,69 +284,79 @@
 // export default Jetboard;
 
 
-/* eslint-disable react-hooks/exhaustive-deps */
+/* Jetboard.js — updated so animation resumes where it left off */
 import React, { useLayoutEffect, useRef, useState, forwardRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useNavigate } from "react-router-dom";
 import { killSectionScrollTriggers } from "../helpers/gsap-utils";
+
 import "../components/JetBoard.css";
+import lineImg from "../assets/line.gif";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* GLOBAL PNG‑frame cache */
+const cachedFrames = [];
+let   framesReady  = false;
+
+/* CONSTANTS */
+const FRAME_COUNT     = 103;
+const SCROLL_DISTANCE = 6500;
+const BASE_DAMPING    = 0.3;
+const framePath = i => `/images/jetframes/heed0001${String(i).padStart(3,"0")}.png`;
+
 const Jetboard = forwardRef((props, outerRef) => {
-  /* ───────── refs / state ───────── */
-  const canvasRef    = useRef(null);
   const containerRef = useRef(null);
+  const canvasRef    = useRef(null);
   const overlayRef   = useRef(null);
+  const progressRef  = useRef(null);
   const images       = useRef([]);
   const navigate     = useNavigate();
 
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [isClosed,     setIsClosed]     = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [closed, setClosed] = useState(false);
 
-  /* ───────── constants ───────── */
-  const frameCount        = 103;
-  const scrollDistance    = 6500;
-  const baseDampingFactor = 0.3;
-  const currentFrame = i =>
-    `/images/jetframes/heed0001_${String(1000 + i).padStart(1, "0")}.png`;
-
-  /* ───────── preload PNG frames ───────── */
+  /* preload frames once per tab */
   useLayoutEffect(() => {
+    if (framesReady) { images.current = cachedFrames; setLoaded(true); return; }
+
     let mounted = true;
-    const load = idx =>
-      new Promise(res => {
-        const img = new Image();
-        img.onload  = () => { if (mounted) images.current[idx] = img; res(); };
-        img.onerror = res;
-        img.src     = currentFrame(idx);
-      });
+    const load = idx => new Promise(res => {
+      const img = new Image();
+      img.onload  = () => { if (mounted) images.current[idx] = img; res(); };
+      img.onerror = res;
+      img.decoding = "async";
+      img.src = framePath(idx);
+    });
 
     (async () => {
-      for (let i = 0; i < frameCount; i += 4) {
+      for (let i = 0; i < FRAME_COUNT; i += 20) {
         await Promise.all(
-          Array.from({ length: 4 }, (_, k) =>
-            i + k < frameCount ? load(i + k) : null
-          )
+          Array.from({ length: 20 }, (_, k) => i+k < FRAME_COUNT ? load(i+k) : null)
         );
       }
-      if (mounted) setImagesLoaded(true);
+      if (!mounted) return;
+      framesReady = true;
+      cachedFrames.length = FRAME_COUNT;
+      for (let i = 0; i < FRAME_COUNT; i++) cachedFrames[i] = images.current[i];
+      setLoaded(true);
     })();
 
-    return () => { mounted = false; images.current = []; };
+    return () => { mounted = false; };
   }, []);
 
-  /* ───────── GSAP: canvas frames + overlay fade ───────── */
+  /* GSAP scroll animation */
   useLayoutEffect(() => {
-    if (!imagesLoaded) return;
+    if (!loaded || closed) return;
 
     const ctxScope = gsap.context(() => {
       const canvas = canvasRef.current;
       const ctx2d  = canvas.getContext("2d");
 
+      /* draw helper */
       const draw = idx => {
-        const img = images.current[idx % frameCount];
+        const img = images.current[idx % FRAME_COUNT];
         if (!img) return;
 
         const dpr = window.devicePixelRatio || 1;
@@ -269,7 +367,6 @@ const Jetboard = forwardRef((props, outerRef) => {
         canvas.height = ch * dpr;
         canvas.style.width  = `${cw}px`;
         canvas.style.height = `${ch}px`;
-
         ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         const scale = Math.min(cw / img.width, ch / img.height);
@@ -280,73 +377,94 @@ const Jetboard = forwardRef((props, outerRef) => {
         ctx2d.drawImage(img, x, y, img.width * scale, img.height * scale);
       };
 
-      /* resize => draw first frame */
-      const onResize = () => draw(0);
+      /* keep a reference to the ScrollTrigger */
+      let st;                       // NEW
+      /* redraw current frame on resize (instead of frame 0) */
+      const onResize = () => {
+        if (st) draw(Math.round(st.progress * FRAME_COUNT));
+      };
       window.addEventListener("resize", onResize);
-      onResize();
 
-      /* pinned canvas scrolling */
+      /* scroll‑scrubbed animation */
       let cur = 0, lastT = 0, lastY = 0, vel = 0;
-      gsap.to({ t: 0 }, {
+      const tween = gsap.to({ t: 0 }, {
         t: 1,
         ease: "none",
         scrollTrigger: {
           trigger : containerRef.current,
           start   : "top top",
-          end     : `+=${scrollDistance}`,
+          end     : `+=${SCROLL_DISTANCE}`,
           scrub   : true,
           pin     : true,
+          onLeave: () => {
+            containerRef.current.classList.add("hidden-white");
+            gsap.set(
+              [canvasRef.current, overlayRef.current, progressRef.current],
+              { autoAlpha: 0 }
+            );
+            gsap.set(containerRef.current, { pointerEvents: "none" });
+          },
+          onEnterBack: () => {
+            containerRef.current.classList.remove("hidden-white");
+            gsap.set(
+              [canvasRef.current, overlayRef.current, progressRef.current],
+              { autoAlpha: 1 }
+            );
+            /* make “SCROLL” label opacity match current progress instantly */
+            gsap.set(overlayRef.current, { autoAlpha: 1 - st.progress });
+            gsap.set(containerRef.current, { pointerEvents: "auto" });
+          },
           onUpdate(self) {
             const now = performance.now();
             if (lastT) {
               const dt = (now - lastT) / 1000;
               const dy = self.scroll() - lastY;
-              vel = vel * .8 + (dy / dt) * .2;
+              vel = vel * 0.8 + (dy / dt) * 0.2;
             }
             lastT = now; lastY = self.scroll();
 
-            const damp   = Math.min(.5, baseDampingFactor + Math.abs(vel) / 2000);
-            const target = self.progress * frameCount;
+            const damp   = Math.min(0.5, BASE_DAMPING + Math.abs(vel) / 2000);
+            const target = self.progress * FRAME_COUNT;
             cur += (target - cur) * damp;
-            if (Math.abs(target - cur) < .5) cur = target;
+            if (Math.abs(target - cur) < 0.5) cur = target;
             draw(Math.round(cur));
           }
         }
       });
 
-      /* overlay fades out over first 250px */
+      st = tween.scrollTrigger;     // NEW (after tween is created)
+      draw(Math.round(st.progress * FRAME_COUNT)); // initial draw at correct frame
+
+      /* fade “SCROLL” label only for first 250 px */
       ScrollTrigger.create({
-        start  : 0,
-        end    : 250,
-        scrub  : true,
-        onUpdate(self) {
-          gsap.set(overlayRef.current, { autoAlpha: 1 - self.progress });
-        }
+        start: 0,
+        end: 250,
+        scrub: true,
+        onUpdate: self =>
+          gsap.set(overlayRef.current, { autoAlpha: 1 - self.progress })
       });
 
-      return () => window.removeEventListener("resize", onResize);
+      return () => {
+        window.removeEventListener("resize", onResize);
+      };
     }, containerRef);
 
     return () => ctxScope.revert();
-  }, [imagesLoaded]);
+  }, [loaded, closed]);
 
-  /* ───────── close handler ───────── */
+  /* close handler */
   const handleClose = () => {
     killSectionScrollTriggers(containerRef.current);
     gsap.set(containerRef.current, { clearProps: "all" });
-    setIsClosed(true);
+    setClosed(true);
     navigate("/");
   };
 
-  /* ───────── scroll-to-top ───────── */
-  const scrollToTop = () =>
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-  if (isClosed) return null;
+  if (!loaded) return <div className="frame-loader" />;
+  if (closed)   return null;
 
   return (
     <>
-      {/* 3-D scroll-pinned canvas */}
       <div
         ref={el => {
           containerRef.current = el;
@@ -355,46 +473,95 @@ const Jetboard = forwardRef((props, outerRef) => {
         className="heed-ejet-section"
       >
         <button className="close-button-ejet" onClick={handleClose}>✕</button>
-        <div ref={overlayRef} className="intro-overlay">
-          <span className="intro-text">SCROLL</span>
+
+        {/* progress bar */}
+        <div className="progress-overlay-ejet" ref={progressRef}>
+          <img src={lineImg} alt="" />
         </div>
+
+        {/* scroll label */}
+        <div ref={overlayRef} className="intro-overlay">
+          <span className="intro-text" style={{ fontFamily: "Ethnocentric" }}>
+            SCROLL
+          </span>
+        </div>
+
         <canvas ref={canvasRef} />
       </div>
 
-      {/* ----- data-sheet signup ----- */}
+      {/* DATA SHEET SECTION */}
       <section className="data-sheet-section">
-        <h2>DATA&nbsp;SHEET</h2>
-        <p>Want the full technical PDF? Drop your email – we’ll send it right away.</p>
+            <h2 style={{ marginBottom: "30px" }}>DATA&nbsp;SHEET</h2>
+
+         <div className="progress-overlay-under-ejet">
+           <img src={lineImg} alt="" />
+         </div>
+
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px"
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "Meiryo, sans-serif",
+            }}
+          >
+            ACCESS THE TECHNICAL SPEC PDF. SUBMIT YOUR EMAIL BELOW AND WE’LL
+            SEND THE COMPLETE TECHNICAL DOCUMENT STRAIGHT TO YOUR INBOX.
+          </p>
+        </div>
+
         <form
           className="newsletter-form"
-          onSubmit={async e => {
+          onSubmit={async (e) => {
             e.preventDefault();
             const email = e.target.email.value;
             try {
-              const rsp = await fetch("http://heedjetboards.com:3000/users", {
+              const rsp = await fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email })
+                body: JSON.stringify({ email ,type: 'Data-sheet'})
               });
               const js = await rsp.json();
-              alert(js.success ? "Check your inbox!" : js.error || "Please try again");
+            
+              alert(
+                rsp.ok && js.id
+                  ? "Check your inbox!"
+                  : js.error || "Please try again"
+              );
               if (js.success) e.target.reset();
             } catch {
               alert("Something went wrong, please retry.");
             }
           }}
         >
-          <input type="email" name="email" placeholder="Your email" required/>
-          <button type="submit">Send&nbsp;PDF</button>
+          <input
+            type="email"
+            name="email"
+            placeholder="YOUR EMAIL"
+            required
+            style={{
+              padding: "10px 14px",
+              fontSize: "14px",
+              fontFamily: "Meiryo, sans-serif",
+              boxShadow: "0 2px 6px rgba(0,0,0,.15)",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+              outline: "none"
+            }}
+          />
+          <button
+            type="submit"
+            style={{ fontFamily: "OCTA, sans-serif", color: "white" }}
+          >
+            Send&nbsp;PDF
+          </button>
         </form>
       </section>
-
-      {/* ───── Scroll-to-Top Button ───── */}
-      <button
-        className="scroll-top-button"
-        onClick={scrollToTop}
-        aria-label="Back to top"
-      />
     </>
   );
 });
