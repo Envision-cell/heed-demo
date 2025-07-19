@@ -373,3 +373,26 @@ input::placeholder {
   /* scroll‑to‑top gradient bar: shorter */
   .scroll-top-button { height: 80px; right: 14px; }
 }
+
+
+
+
+@media (max-width: 1072px) {
+
+.progress-overlay-under {
+    position: relative;
+    bottom: 1vh;
+    left: 8vw;
+    width: 80vw;
+    height: 0.4vh;
+    display: flex
+;
+    justify-content: flex-end;
+    z-index: 2;
+    margin-top: 0;
+    pointer-events: none;
+}
+}
+
+
+

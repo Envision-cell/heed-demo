@@ -118,7 +118,7 @@ html, body { overflow‑x: hidden; }
 /* ─────────────────────────────────────────────
    Phone (≤ 768 px)
 ───────────────────────────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 1072px) {
 
   .background-video { object-fit: cover; }
 
@@ -130,43 +130,32 @@ html, body { overflow‑x: hidden; }
   .loading-screen { font-size: 1.1rem; padding: 0 20px; text-align: center; }
 
   /* mobile buttons stacked (keep your existing flex‑column rule) */
-  .banner-labels { margin-top: 3rem; gap: 1rem; flex-direction: row; align-items: center; transform: translateY(-15px);}
+  .banner-labels { margin-top: 2rem; gap: 1rem; flex-direction: row; align-items: center; transform: translateY(-15px);}
 
   /* labels shrink */
   .cta-label { margin-bottom:100px clamp(1rem,4vw,1.5rem); }
 
   /* progress bars shorter & centred visually */
   .progress-overlay{
-    top: 94vh;
+    top: 93vh;
     width: 39vw;
     height: 1vh;
   }
   .progress-overlay-right {
-    top: 94vh;
+    top: 93vh;
     width: 35vw;
     height: 1vh;
   }
   .progress-overlay       { left: -20vw; }
-  .progress-overlay-right { right: -20vw; }
+  .progress-overlay-right { right: -18.5vw; }
 
    .seam-bridge--bottom {
       bottom: -20px;
       left: -646px;
-      width: 190%;
+      width: 170%;
       height: 150px;  
       object-position: top;
-  }
-}
-
-
-
-@media (max-width: 589px){
-  .seam-bridge--bottom {
-      bottom: -20px;
-      left: -646px;
-      width: 200%;
-      height: 150px;  
-      object-position: top;
+      transform-origin: left center;
   }
 
 }

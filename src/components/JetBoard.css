@@ -434,3 +434,23 @@
   /* scroll‑top bar */
   .scroll-top-button { height: 80px; right: 14px; }
 }
+
+
+
+@media (max-width: 1072px) {
+
+.progress-overlay-under-ejet {
+    position: relative;
+    bottom: 4vh;
+    left: 27vw;
+    width: 40vw;
+    height: 0.4vh;
+    display: flex
+;
+    justify-content: flex-end;
+    z-index: 2;
+    margin-top: 0;
+    pointer-events: none;
+}
+}
+
