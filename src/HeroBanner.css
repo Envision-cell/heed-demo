@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────
-   Home & Hero / Footer Seam Overlay Styles
-   Desktop base  ≥ 1025 px
+   Home & Hero / Footer Seam Overlay Styles
+   Desktop base  ≥ 1025 px
 ───────────────────────────────────────────── */
 html, body { overflow‑x: hidden; }
 /* Reset hero + footer margins/padding */
@@ -75,7 +75,7 @@ html, body { overflow‑x: hidden; }
 .hero-banner.ready .loading-screen { opacity: 0; pointer-events: none; }
 
 /* ─────────────────────────────────────────────
-   Tablet (769 – 1024 px)
+   Tablet (769 – 1024 px)
 ───────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1045px) {
 
@@ -106,7 +106,7 @@ html, body { overflow‑x: hidden; }
   .progress-overlay       { left: -27vh; }
   .progress-overlay-right { right: -30vh; }
   .seam-bridge--bottom {
-      bottom: -30px;
+      bottom: -60px;
       left: -646px;
       width: 170%;
       height: 150px;  
@@ -116,7 +116,7 @@ html, body { overflow‑x: hidden; }
 }
 
 /* ─────────────────────────────────────────────
-   Phone (≤ 768 px)
+   Phone (≤ 768 px)
 ───────────────────────────────────────────── */
 @media (max-width: 1072px) {
 
@@ -150,12 +150,70 @@ html, body { overflow‑x: hidden; }
   .progress-overlay-right { right: -18.5vw; }
 
    .seam-bridge--bottom {
-      bottom: -20px;
-      left: -646px;
+      bottom: -40px;
+      left: -640px;
       width: 170%;
       height: 150px;  
       object-position: top;
       transform-origin: left center;
   }
 
+}
+/* ─────────────────────────────────────────────
+   Mobile landscape (phone height ≤ 500 px)
+───────────────────────────────────────────── */
+@media (orientation: landscape) and (max-height: 500px) {
+
+  /* Keep the video & hero full-bleed in either axis */
+  .video-banner,
+  .background-video,
+  .hero-banner { height: 100vh; object-fit: cover; }
+
+  /* Overlay copy sits a bit higher because the vh is shorter */
+  .banner-overlay { bottom: 40px; font-size: 1.05rem; padding: 0 12px; }
+
+  /* Header gets slimmer; the “scroll” hint is pointless in landscape */
+  .heed-header  { height: 56px; margin: 0; border-radius: 0; }
+  .scroll-down  { display: none; }
+
+  /* Loader / blocker text scales down a touch */
+  .loader-overlay,
+  .loading-screen { font-size: 0.95rem; padding: 0 16px; }
+
+  /* Label cluster keeps the same look but uses row layout */
+  .banner-labels  {
+    margin-top: 0.25rem;
+    flex-direction: row;
+    gap: .18rem;
+    align-items: center;
+    transform: translateY(-10%);
+  }
+  .cta-label      { 
+    font-size: clamp(.9rem, 3.5vw, 1.3rem);
+    margin-bottom: 32px;   /* replaces broken shorthand in original */
+  }
+
+  /* Progress bars centre nicely even on 19.5:9 phones */
+  .progress-overlay,
+  .progress-overlay-right {
+    top: calc(92vh + 2px);
+    width: 36vw;
+    height: .9vh;
+  }
+  .progress-overlay       { left: -18vw; }
+  .progress-overlay-right { right: -18vw; }
+
+  /* Seam bridge – stretch rightward just like portrait ≤ 768 px */
+  .seam-bridge--bottom {
+    bottom: -14px;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    object-position: top;
+    transform-origin: left center;
+    transform: scaleX(1.7);   /* same factor you use in portrait */
+  }
+
+  /* Fade at hero foot is shorter to save vertical space */
+  .hero-fade { height: 120px; }
 }

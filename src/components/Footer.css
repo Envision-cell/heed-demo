@@ -217,9 +217,9 @@
 }
  
 .seam-bridge--top {
-      position: absolute;
+    position: absolute;
     top: 0;
-    left: -185px;
+    left: -485px;
     width: 150%;
     height: 25px;
     object-fit: cover;
