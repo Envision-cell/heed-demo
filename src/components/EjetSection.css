@@ -255,7 +255,7 @@ input::placeholder {
   display: flex;
   justify-content: flex-end;
   z-index: 2;
-  margin-top: 0;
+  margin-top: 2rem;
   pointer-events: none;
 }
 .progress-overlay-under img {
@@ -313,13 +313,17 @@ input::placeholder {
     width: 15vw;
     height: 0.8vh;
   }
+  .progress-overlay-under{
+     margin-top: 2rem !important;
+  }
   .progress-overlay-jet  { left: -9vh;  }
   .progress-overlay-under {
     width: 80vw;
     left : 9vw;
     height: 0.5vh;
-  }
+   
 
+}
   /* data‑sheet section */
   .data-sheet-section-jet { padding: 80px 30px; }
   .data-sheet-section-jet h2 { font-size: clamp(32px, 6vw, 52px) !important; }
@@ -339,6 +343,9 @@ input::placeholder {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
+  }
+    .progress-overlay-under{
+     margin-top: 2rem !important;
   }
 
   /* intro overlay text */
@@ -389,7 +396,7 @@ input::placeholder {
 ;
     justify-content: flex-end;
     z-index: 2;
-    margin-top: 0;
+    margin-top: 2 rem !important;
     pointer-events: none;
 }
 }

@@ -299,7 +299,7 @@
   z-index: 2;
 }
  
-.seam-bridge--top {
+/* .seam-bridge--top {
 
     position: absolute;
     top: 0;
@@ -309,5 +309,29 @@
     object-fit: cover;     
     object-position: bottom;
     z-index: 2;        
-} 
+}  */
+
+    .seam-bridge--top {
+        position: absolute !important;
+        top: 0!important;
+        left: -185px !important;
+        left: -185px !important;
+        width: 139.8% !important;
+        height: 25px !important;
+        object-fit: cover !important;
+        object-position: bottom !important;
+        z-index: 2 !important;
   }
+}
+@media (min-width: 820px) and (max-width: 1180px) {
+.seam-bridge--top {
+        position: absolute !important;
+        top: 0!important;
+        left: -291.5px !important;
+        width: 139.8% !important;
+        height: 25px !important;
+        object-fit: cover !important;
+        object-position: bottom !important;
+        z-index: 2 !important;
+  }
+}

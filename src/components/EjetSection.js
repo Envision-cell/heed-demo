@@ -512,7 +512,7 @@ const EjetSection = forwardRef((props, outerRef) => {
             e.preventDefault();
             const email = e.target.email.value;
             try {
-              const rsp = await fetch("http://localhost:5000/users", {
+              const rsp = await fetch("https://api.heedjetboards.com/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email ,type: 'Product-spec'})

@@ -12,7 +12,7 @@ html, body { overflow‑x: hidden; }
 }
 
 /* Base stacking contexts */
-.hero-page-wrapper { position: relative; }
+.hero-page-wrapper { position: relative; }  
 .footer-wrapper    { position: relative; z-index: 1; background: transparent; }
 
 /* Seam overlay */
@@ -79,38 +79,38 @@ html, body { overflow‑x: hidden; }
 ───────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1045px) {
 
-  .background-video { object-fit: cover; }
+  .background-video { object-fit: cover !important; }
 
   /* scale everything slightly smaller */
-  .banner-overlay    { bottom: 120px; font-size: 1.5rem; padding: 0 20px; }
-  .heed-header       { height: 70px; border-radius: 8px; margin: 4px auto 6px; }
-  .scroll-down       { font-size: 1.8rem; margin-top: 1.5rem; }
+  .banner-overlay    { bottom: 120px !important; font-size: 1.5rem !important; padding: 0 20px !important; }
+  .heed-header       { height: 70px !important; border-radius: 8px !important; margin: 4px auto 6px !important; }
+  .scroll-down       { font-size: 1.8rem !important; margin-top: 1.5rem!important; }
   .loader-overlay,
-  .loading-screen    { font-size: 1.3rem; padding: 0 30px; }
+  .loading-screen    { font-size: 1.3rem !important; padding: 0 30px !important; }
 
   /* labels */
-  .cta-label         { font-size: clamp(1.2rem,2.6vw,1.9rem);   margin-bottom: 40px; }
+  .cta-label         { font-size: clamp(1.2rem,2.6vw,1.9rem) !important;   margin-bottom: 40px !important; }
 
   /* progress bars longer so they read similarly on narrower viewport */
   .progress-overlay {
-    top: 93vh;
-    width: 35.6vw;;
-    height: 0.8vh;
+    top: 93vh !important;
+    width: 35.6vw !important;
+    height: 0.8vh !important;
   }
 
   .progress-overlay-right {
-    top: 93vh;
-    width: 35.6vw;;
-    height: 0.8vh;
+    top: 93vh !important;
+    width: 35.6vw!important;
+    height: 0.8vh !important;
   }
-  .progress-overlay       { left: -27vh; }
-  .progress-overlay-right { right: -30vh; }
+  .progress-overlay       { left: -27vh !important; }
+  .progress-overlay-right { right: -30vh !important; }
   .seam-bridge--bottom {
-      bottom: -60px;
-      left: -646px;
-      width: 170%;
-      height: 150px;  
-      object-position: top;
+      bottom: -60px !important;
+      left: -646px !important;
+      width: 170% !important;
+      height: 150px !important;  
+      object-position: top!important ;
   }
     
 }
@@ -120,42 +120,46 @@ html, body { overflow‑x: hidden; }
 ───────────────────────────────────────────── */
 @media (max-width: 1072px) {
 
-  .background-video { object-fit: cover; }
+  .background-video { object-fit: cover!important;  }  
 
   /* overlay & elements */
-  .banner-overlay { bottom: 80px; font-size: 1.2rem; padding: 0 15px; }
-  .heed-header    { height: 60px; border-radius: 0;   margin: 0; }
-  .scroll-down    { font-size: 1.4rem; margin-top: 1rem; }
+  .banner-overlay { bottom: 80px !important; font-size: 1.2rem !important; padding: 0 15px !important; }
+  .heed-header    { height: 60px !important; border-radius: 0 !important;   margin: 0 !important; }
+  .scroll-down    { font-size: 1.4rem !important; margin-top: 1rem !important; }
   .loader-overlay,
-  .loading-screen { font-size: 1.1rem; padding: 0 20px; text-align: center; }
+  .loading-screen { font-size: 1.1rem !important; padding: 0 20px !important; text-align: center !important; }
 
   /* mobile buttons stacked (keep your existing flex‑column rule) */
-  .banner-labels { margin-top: 2rem; gap: 1rem; flex-direction: row; align-items: center; transform: translateY(-15px);}
+  .banner-labels { margin-top: 2rem !important;
+     gap: 1rem !important; 
+     flex-direction: row !important;
+      align-items: center !important;
+       transform: translateY(-15px) !important;}
 
   /* labels shrink */
-  .cta-label { margin-bottom:100px clamp(1rem,4vw,1.5rem); }
+  .cta-label { margin-bottom:100px clamp(1rem,4vw,1.5rem) !important; }
 
   /* progress bars shorter & centred visually */
   .progress-overlay{
-    top: 93vh;
-    width: 39vw;
-    height: 1vh;
+    top: 93vh !important;
+    width: 39vw !important;
+    height: 1vh !important;
   }
   .progress-overlay-right {
-    top: 93vh;
-    width: 35vw;
-    height: 1vh;
+    top: 93vh !important;
+    width: 35vw !important;
+    height: 1vh !important;
   }
-  .progress-overlay       { left: -20vw; }
-  .progress-overlay-right { right: -18.5vw; }
+  .progress-overlay       { left: -20vw !important; }
+  .progress-overlay-right { right: -18.5vw !important; }
 
    .seam-bridge--bottom {
-      bottom: -40px;
-      left: -640px;
-      width: 170%;
-      height: 150px;  
-      object-position: top;
-      transform-origin: left center;
+      bottom: -40px !important;
+      left: -640px !important;
+      width: 170% !important;
+      height: 150px !important;  
+      object-position: top !important;
+      transform-origin: left center !important;
   }
 
 }
@@ -167,53 +171,190 @@ html, body { overflow‑x: hidden; }
   /* Keep the video & hero full-bleed in either axis */
   .video-banner,
   .background-video,
-  .hero-banner { height: 100vh; object-fit: cover; }
+  .hero-banner { height: 100vh !important; object-fit: cover !important; }
 
   /* Overlay copy sits a bit higher because the vh is shorter */
-  .banner-overlay { bottom: 40px; font-size: 1.05rem; padding: 0 12px; }
+  .banner-overlay { bottom: 40px !important; font-size: 1.05rem !important; padding: 0 12px !important; }
 
   /* Header gets slimmer; the “scroll” hint is pointless in landscape */
-  .heed-header  { height: 56px; margin: 0; border-radius: 0; }
-  .scroll-down  { display: none; }
+  .heed-header  { height: 56px; margin: 0 !important; border-radius: 0 !important; }
+  .scroll-down  { display: none !important; }
 
   /* Loader / blocker text scales down a touch */
   .loader-overlay,
-  .loading-screen { font-size: 0.95rem; padding: 0 16px; }
+  .loading-screen { font-size: 0.95rem !important; padding: 0 16px !important; }
 
   /* Label cluster keeps the same look but uses row layout */
   .banner-labels  {
-    margin-top: 0.25rem;
-    flex-direction: row;
-    gap: .18rem;
-    align-items: center;
-    transform: translateY(-10%);
+    margin-top: 0.25rem !important;
+    flex-direction: row !important;
+    gap: .18rem !important;
+    align-items: center !important;
+    transform: translateY(-10%) !important;
   }
   .cta-label      { 
-    font-size: clamp(.9rem, 3.5vw, 1.3rem);
-    margin-bottom: 32px;   /* replaces broken shorthand in original */
+   font-size: clamp(.9rem, 3.5vw, 1.3rem) !important;
+        margin-bottom: 22px !important;
   }
 
   /* Progress bars centre nicely even on 19.5:9 phones */
   .progress-overlay,
   .progress-overlay-right {
-    top: calc(92vh + 2px);
-    width: 36vw;
-    height: .9vh;
+    top: calc(92vh + -4.3px) !important;
+    width: 36vw !important;
+    height: .9vh !important;
   }
-  .progress-overlay       { left: -18vw; }
-  .progress-overlay-right { right: -18vw; }
+  .progress-overlay       { left: -18vw !important; }
+  .progress-overlay-right { right: -18vw !important; }
 
   /* Seam bridge – stretch rightward just like portrait ≤ 768 px */
-  .seam-bridge--bottom {
-    bottom: -14px;
-    left: 0;
-    width: 100%;
-    height: 140px;
-    object-position: top;
-    transform-origin: left center;
-    transform: scaleX(1.7);   /* same factor you use in portrait */
-  }
+    .seam-bridge--bottom {
+        bottom: -16px !important;
+        left: -287px !important;
+        width: 140.8% !important;
+        height: 75px !important;
+        object-position: top !important;
+        /* transform-origin: left center !important; */
+        /* transform: scaleX(1.7) !important; */
+    }
+
 
   /* Fade at hero foot is shorter to save vertical space */
-  .hero-fade { height: 120px; }
+  .hero-fade { height: 120px !important; }
+}
+/* ─────────────────────────────────────────────
+   Small phones (320 px – 630 px)
+───────────────────────────────────────────── */
+@media (min-width: 320px) and (max-width: 630px) {
+
+  /* ——— Layout fundamentals ——— */
+  .video-banner,
+  .background-video,
+  .hero-banner {
+    width: 100% !important;
+    height: 100vh !important;      /* full‑bleed hero */
+    object-fit: cover !important;  /* crop edges, keep centre */
+  }
+
+  /* ——— Header & loaders ——— */
+  .heed-header   { height: 56px !important; margin: 0 !important; }
+  .loader-overlay,
+  .loading-screen{ font-size: .95rem !important; padding: 0 14px !important; }
+
+  /* ——— Call‑to‑action labels ——— */
+  .banner-labels {
+    margin-top: 1.25rem !important;
+    flex-direction: column !important;   /* stack vertically */
+    gap: .6rem !important;
+    align-items: center !important;
+    transform: translateY(0) !important;
+  }
+  .cta-label {
+    font-size: clamp(.95rem, 5vw, 1.25rem) !important;
+    margin-bottom: .3rem !important;
+  }
+
+  /* ——— Overlay copy & scroll hint ——— */
+  .banner-overlay { bottom: 60px !important; font-size: 1rem !important; padding: 0 12px !important; }
+  .scroll-down    { display: none !important; }  /* save vertical space */
+
+  /* ——— Progress bars ——— */
+  .progress-overlay,
+  .progress-overlay-right {
+    top: calc(92vh + -4px) !important;
+    width: 50vw !important;      /* make bars read on tiny screens */
+    height: 1.2vh !important;
+  }
+  .progress-overlay       { left: -15vw !important; }
+  .progress-overlay-right { right: -15vw !important; }
+
+  /* ——— Seam bridge ——— */
+  .seam-bridge--bottom {
+    bottom: -35px !important;
+    left: -640px !important;
+    width: 180% !important;      /* stretch to avoid black edges */
+    height: 140px !important;
+    object-position: top !important;
+  }
+
+  /* ——— Hero fade ——— */
+  .hero-fade { height: 110px !important; }
+
+}
+/* ─────────────────────────────────────────────
+   Hot‑fix: 630 px → 320 px (progress bars + CTA text)
+───────────────────────────────────────────── */
+@media (min-width: 320px) and (max-width: 630px) {
+
+  /* ——— Progress bars ——— */
+  .progress-overlay,
+  .progress-overlay-right {
+    top: 94vh !important;          /* nudged down a touch */
+    width: 42vw !important;        /* shorter so they fit */
+    height: 1vh !important;
+  }
+  .progress-overlay       { left: 4vw !important;  justify-content: flex-start !important; }
+  .progress-overlay-right { right: 4vw !important; justify-content: flex-end   !important; }
+
+  /* ——— CTA label cluster (“Jetboard / Ski”) ——— */
+  .banner-labels {
+    top: 52% !important;           /* put roughly mid‑screen */
+    transform: translateY(-50%) !important;
+    width: 100%;
+    flex-direction: row !important;   /* side‑by‑side again */
+    justify-content: center !important;
+    gap: 1.2rem !important;
+    margin-top: 0 !important;
+    z-index: 6;                    /* above video overlay */
+  }
+
+  .cta-label {
+    flex: 0 1 auto !important;     /* allow to shrink if needed */
+    width: auto !important;
+    font-size: clamp(1rem, 4.8vw, 1.35rem) !important;
+    padding: 0 .5rem !important;
+    margin-bottom: 0 !important;   /* override earlier oversized margin */
+    line-height: 1.2;
+  }
+}
+/* ─────────────────────────────────────────────
+   320 px – 630 px : tighter font + centred bars
+───────────────────────────────────────────── */
+@media (min-width: 320px) and (max-width: 630px) {
+
+  /* ——— CTA label text ——— */
+  .cta-label {
+    font-size: clamp(0.85rem, 4.2vw, 1.1rem) !important;  /* smaller */
+    padding: 0 .4rem !important;
+    line-height: 1.15 !important;
+  }
+
+  /* ——— Progress bars ——— */
+  .progress-overlay,
+  .progress-overlay-right {
+    top: 94vh !important;
+    width: 40vw !important;      /* fits with 5 vw margins */
+    height: 1vh !important;
+  }
+  .progress-overlay       { left: 5vw !important;  justify-content: flex-start !important; }
+  .progress-overlay-right { right: 5vw !important; justify-content: flex-end   !important; }
+}
+
+@media (min-width: 767px) and (max-width: 1200px) {
+   .seam-bridge--bottom {
+    bottom: -35px !important;
+    left: -640px !important;
+    width: 200% !important;      /* stretch to avoid black edges */
+    height: 140px !important;
+    object-position: top !important;
+  }
+}
+@media (min-width: 820px) and (max-width: 1180px) {
+   .seam-bridge--bottom {
+    bottom: -35px !important;
+    left: -540px !important;
+    width: 146% !important;      /* stretch to avoid black edges */
+    height: 140px !important;
+    object-position: top !important;
+  }
 }
